@@ -13,9 +13,9 @@ compile:
 	avr-gcc -Wall -g -mmcu=atmega328p -o main.elf lcd_pcf8574t.o twi.o main.o -D F_CPU 16000000UL
 	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
 
-main: lcd_pcf8574t.c twi/twi.c
-	avr-gcc -Wall $(STRICTMODE) -g -mmcu=atmega328p -c -O2 main.c lcd_pcf8574t.c twi/twi.c -D F_CPU=16000000UL
-	avr-gcc -Wall -g -mmcu=atmega328p -o main.elf lcd_pcf8574t.o twi.o main.o -D F_CPU=16000000UL
+main: lcd_pcf8574t.c twi/twi.c eeprom/i2c_24lc256.c
+	avr-gcc -Wall $(STRICTMODE) -I. -g -mmcu=atmega328p -c -O2 main.c eeprom/i2c_24lc256.c lcd_pcf8574t.c twi/twi.c -D F_CPU=16000000UL
+	avr-gcc -Wall -g -mmcu=atmega328p -o main.elf lcd_pcf8574t.o i2c_24lc256.o twi.o main.o -D F_CPU=16000000UL
 	avr-objcopy -j .text -j .data -O ihex main.elf main.hex
 
 	avrdude -carduino -patmega328p -P /dev/ttyACM0 -D -Uflash:w:main.hex:i -v
